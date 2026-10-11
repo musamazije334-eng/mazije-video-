@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101020">
+<title>MAZIJE VIDEO</title>
+<style>
+:root{--bg:#101020;--card:#1c1c31;--pink:#ff3985;--purple:#8155f5;--text:#fff;--muted:#aaa9c1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#151528;padding:12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #34334b}
+.logo{font-size:18px;font-weight:900;white-space:nowrap}
+.logo b{background:linear-gradient(120deg,var(--pink),var(--purple));padding:9px;border-radius:10px}
+input,textarea{font:inherit}
+.search{flex:1;min-width:0;padding:12px;background:var(--card);border:1px solid #383750;border-radius:12px;color:white}
+button{border:0;border-radius:10px;padding:10px;cursor:pointer;font-weight:bold}
+.primary{background:linear-gradient(120deg,var(--pink),var(--purple));color:white}
+.layout{max-width:1000px;margin:auto;padding:18px;display:grid;grid-template-columns:175px minmax(0,620px);gap:18px}
+nav{position:sticky;top:75px;display:grid;gap:8px;align-self:start}
+nav button{text-align:left;background:transparent;color:var(--muted)}
+nav button.active,nav button:hover{background:var(--card);color:white}
+main{min-width:0}
+.card{background:var(--card);border:1px solid #34334b;border-radius:16px;margin-bottom:16px;overflow:hidden}
+.composer{padding:14px}
+textarea{width:100%;min-height:75px;resize:vertical;padding:12px;background:#292840;color:white;border:1px solid #403e58;border-radius:12px}
+.tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.tools button,.tools label{background:#302e49;color:white;padding:10px;border-radius:10px;cursor:pointer;font-size:13px}
+.tools .primary{background:linear-gradient(120deg,var(--pink),var(--purple))}
+.author{display:flex;align-items:center;gap:10px;padding:13px}
+.avatar{width:42px;height:42px;flex-shrink:0;border-radius:50%;background:linear-gradient(130deg,var(--pink),var(--purple));display:grid;place-items:center;font-weight:bold;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.name{font-weight:bold}.muted{color:var(--muted);font-size:12px;margin-top:4px}
+.posttext{padding:0 14px 14px;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere}
+.media{background:#080810}
+.media img,.media video{display:block;width:100%;max-height:650px;object-fit:contain}
+.stats{display:flex;justify-content:space-between;padding:11px 13px;color:var(--muted);font-size:12px}
+.actions{display:flex;border-top:1px solid #34334b;padding:4px}
+.actions button{flex:1;background:transparent;color:var(--muted)}
+.actions button.liked{color:var(--pink)}
+.comments{padding:12px;border-top:1px solid #34334b}
+.comment{font-size:13px;margin:8px 0;overflow-wrap:anywhere}
+.comment b{margin-right:5px}
+.commentform{display:flex;gap:7px;margin-top:10px}
+.commentform input{flex:1;min-width:0;padding:10px;background:#292840;border:1px solid #403e58;border-radius:10px;color:white}
+.commentform button{background:var(--purple);color:white}
+h2{font-size:18px}
+.empty{text-align:center;padding:30px;color:var(--muted)}
+.hidden{display:none!important}
+.profile{padding:16px}
+.cover{height:100px;border-radius:12px;background:linear-gradient(120deg,var(--pink),var(--purple),#30cfa4)}
+.profilehead{display:flex;gap:12px;align-items:center;margin-top:-22px}
+.profilehead .avatar{width:68px;height:68px;border:4px solid var(--card)}
+.profile h2{margin:8px 0}
+.statsrow{display:flex;justify-content:space-around;text-align:center;margin-top:22px}
+.statsrow strong{display:block;font-size:20px}
+.statsrow small{color:var(--muted)}
+.bottom{display:none}
+@media(max-width:650px){
+ header{gap:8px;padding:10px}.logo{font-size:14px}
+ .layout{display:block;padding:10px}.sidebar{display:none}
+ .bottom{display:flex;position:fixed;z-index:10;bottom:0;left:0;right:0;justify-content:space-around;background:#171629f5;border-top:1px solid #34334b;padding:6px 0 calc(6px + env(safe-area-inset-bottom))}
+ .bottom button{background:transparent;color:var(--muted);font-size:11px}
+ .bottom button.active{color:var(--pink)}
+ body{padding-bottom:70px}
+ .media img,.media video{max-height:72vh}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo"><b>▶</b> MAZIJE VIDEO</div>
+ <input class="search" id="search" placeholder="🔎 Tafuta posts..." aria-label="Tafuta">
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+<nav>
+<button class="active" data-page="home">⌂ Mwanzo</button>
+<button data-page="videos">▶ Video</button>
+<button data-page="photos">▧ Picha</button>
+<button data-page="liked">♡ Nilizopenda</button>
+<button data-page="profile">◉ Profile yangu</button>
+</nav>
+</aside>
+
+<main>
+<section id="feed">
+<div class="card composer">
+<div class="author" style="padding:0 0 12px">
+<div class="avatar" id="myavatar">M</div>
+<div><div class="name" id="myname">Mtumiaji</div><div class="muted">Shiriki na jamii ya MAZIJE</div></div>
+</div>
+<textarea id="message" placeholder="Una mawazo gani leo? Shiriki hapa..."></textarea>
+<div class="tools">
+<label>▧ Picha <input id="imagefile" type="file" accept="image/*" hidden></label>
+<label>▶ Video <input id="videofile" type="file" accept="video/*" hidden></label>
+<button id="editprofile">☺ Profile</button>
+<button class="primary" id="publish">Chapisha ↗</button>
+</div>
+<div class="muted" id="filename"></div>
+</div>
+<h2 id="feedtitle">✨ Machapisho mapya</h2>
+<div id="posts"></div>
+</section>
+
+<section id="profilepage" class="hidden">
+<div class="card profile">
+<div class="cover"></div>
+<div class="profilehead">
+<div class="avatar" id="bigavatar">M</div>
+<div><h2 id="profilename">Mtumiaji</h2><div class="muted" id="handle">@mazije_user</div></div>
+</div>
+<p id="bio">Karibu kwenye MAZIJE VIDEO ✨</p>
+<button class="primary" id="editprofile2">Hariri profile</button>
+<div class="statsrow">
+<div><strong id="postcount">0</strong><small> Posts</small></div>
+<div><strong>0</strong><small> Followers</small></div>
+<div><strong>0</strong><small> Following</small></div>
+</div>
+</div>
+<h2>Machapisho yangu</h2>
+<div id="myposts"></div>
+</section>
+</main>
+</div>
+
+<nav class="bottom">
+<button class="active" data-page="home">⌂<br>Mwanzo</button>
+<button data-page="videos">▶<br>Video</button>
+<button data-page="photos">▧<br>Picha</button>
+<button data-page="liked">♡<br>Likes</button>
+<button data-page="profile">◉<br>Profile</button>
+</nav>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+let username=localStorage.getItem('mz_name')||'Mtumiaji';
+let handle=localStorage.getItem('mz_handle')||'mazije_user';
+let bio=localStorage.getItem('mz_bio')||'Karibu kwenye MAZIJE VIDEO ✨';
+let avatar=localStorage.getItem('mz_avatar')||'';
+let posts=[];
+let chosen=null,chosenType='',page='home',search='';
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function avatarContent(){return avatar?'<img src="'+avatar+'" alt="Profile">':esc(username.charAt(0).toUpperCase())}
+function updateProfile(){
+['myavatar','bigavatar'].forEach(id=>$(id).innerHTML=avatarContent());
+$('myname').textContent=username;
+$('profilename').textContent=username;
+$('handle').textContent='@'+handle;
+$('bio').textContent=bio;
+$('postcount').textContent=posts.filter(p=>p.author===handle).length;
+}
+function renderPost(p){
+let media=p.media?'<div class="media">'+(p.type==='video'?'<video controls playsinline src="'+p.media+'"></video>':'<img src="'+p.media+'" alt="Picha ya post">')+'</div>':'';
+let comments=p.comments.map(c=>'<div class="comment"><b>'+esc(c.name)+':</b> '+esc(c.text)+'</div>').join('');
+return '<article class="card"><div class="author"><div class="avatar">'+(p.avatar?'<img src="'+p.avatar+'" alt="">':esc(p.name[0]))+'</div><div style="flex:1"><div class="name">'+esc(p.name)+'</div><div class="muted">@'+esc(p.author)+' · '+esc(p.time)+'</div></div>'+(p.author===handle?'<button class="delete" data-id="'+p.id+'">🗑</button>':'')+'</div>'+(p.text?'<div class="posttext">'+esc(p.text)+'</div>':'')+media+'<div class="stats"><span>❤️ '+p.likes+' likes</span><span>'+p.comments.length+' comments · '+p.shares+' shares</span></div><div class="actions"><button class="like '+(p.liked?'liked':'')+'" data-id="'+p.id+'">'+(p.liked?'♥ Umependa':'♡ Like')+'</button><button class="commentbtn" data-id="'+p.id+'">▢ Comment</button><button class="share" data-id="'+p.id+'">↗ Share</button></div><div class="comments"><div>'+comments+'</div><form class="commentform" data-id="'+p.id+'"><input name="comment" placeholder="Andika comment..." maxlength="300"><button>Tuma</button></form></div></article>';
+}
+function render(){
+let q=search.toLowerCase().trim();
+let list=posts.filter(p=>(!q||(p.text+' '+p.name+' '+p.author).toLowerCase().includes(q))&&(page==='videos'?p.type==='video':page==='photos'?p.type==='image':page==='liked'?p.liked:page==='profile'?p.author===handle:true));
+$('feed').classList.toggle('hidden',page==='profile');
+$('profilepage').classList.toggle('hidden',page!=='profile');
+$('feedtitle').textContent=page==='videos'?'▶ Video':page==='photos'?'▧ Picha':page==='liked'?'♡ Machapisho uliyopenda':q?'Matokeo ya utafutaji':'✨ Machapisho mapya';
+$('posts').innerHTML=list.map(renderPost).join('')||'<div class="card empty">Bado hakuna machapisho hapa. Shiriki picha, video au ujumbe wako!</div>';
+$('myposts').innerHTML=posts.filter(p=>p.author===handle).map(renderPost).join('')||'<div class="card empty">Bado hujachapisha.</div>';
+document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+updateProfile();
+}
+function readFile(file,cb){
+if(!file)return;
+if(file.size>15*1024*1024){alert('Faili ni kubwa. Chagua picha au video chini ya 15 MB.');return}
+let r=new FileReader();r.onload=()=>cb(r.result);r.onerror=()=>alert('Imeshindikana kusoma faili.');r.readAsDataURL(file);
+}
+$('imagefile').onchange=e=>{chosen=e.target.files[0];chosenType='image';$('videofile').value='';$('filename').textContent=chosen?'Picha: '+chosen.name:''};
+$('videofile').onchange=e=>{chosen=e.target.files[0];chosenType='video';$('imagefile').value='';$('filename').textContent=chosen?'Video: '+chosen.name:''};
+$('publish').onclick=()=>{
+let text=$('message').value.trim();
+if(!text&&!chosen){alert('Andika ujumbe au chagua picha/video kwanza.');return}
+function finish(media){
+posts.unshift({id:Date.now(),name:username,author:handle,avatar:avatar,text:text,media:media||'',type:chosenType||'text',time:new Date().toLocaleString(),likes:0,liked:false,comments:[],shares:0});
+$('message').value='';chosen=null;chosenType='';$('filename').textContent='';$('imagefile').value='';$('videofile').value='';page='home';render();window.scrollTo(0,0);
+}
+if(chosen)readFile(chosen,finish);else finish('');
+};
+function go(p){page=p;render();window.scrollTo(0,0)}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+$('search').oninput=e=>{search=e.target.value;render()};
+document.addEventListener('click',e=>{
+let b=e.target.closest('button');if(!b)return;
+if(b.classList.contains('like')){
+let p=posts.find(x=>String(x.id)===b.dataset.id);
+if(p){p.liked=!p.liked;p.likes=Math.max(0,p.likes+(p.liked?1:-1));render()}
+}
+if(b.classList.contains('commentbtn')){
+let f=document.querySelector('.commentform[data-id="'+b.dataset.id+'"]');
+if(f)f.querySelector('input').focus();
+}
+if(b.classList.contains('share')){
+let p=posts.find(x=>String(x.id)===b.dataset.id);
+if(p){p.shares++;render();let text='MAZIJE VIDEO: '+p.text;
+if(navigator.share)navigator.share({title:'MAZIJE VIDEO',text:text}).catch(()=>{});
+else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>alert('Ujumbe umenakiliwa.')).catch(()=>alert(text));
+else alert(text)}
+}
+if(b.classList.contains('delete')){
+if(confirm('Unataka kufuta post hii?')){posts=posts.filter(x=>String(x.id)!==b.dataset.id);render()}
+}
+});
+document.addEventListener('submit',e=>{
+if(!e.target.matches('.commentform'))return;
+e.preventDefault();
+let text=e.target.elements.comment.value.trim(),id=e.target.dataset.id;
+if(!text)return;
+let p=posts.find(x=>String(x.id)===id);
+if(p){p.comments.push({name:username,text:text});render()}
+});
+function editProfile(){
+let n=prompt('Andika jina lako:',username);if(n===null)return;
+let h=prompt('Andika username yako bila @:',handle);if(h===null)return;
+let b=prompt('Andika maelezo ya profile:',bio);if(b===null)return;
+username=n.trim()||'Mtumiaji';handle=h.trim().replace(/^@/,'').replace(/\s/g,'')||'mazije_user';bio=b.trim();
+localStorage.setItem('mz_name',username);localStorage.setItem('mz_handle',handle);localStorage.setItem('mz_bio',bio);
+updateProfile();render();
+}
+$('editprofile').onclick=editProfile;
+$('editprofile2').onclick=editProfile;
+render();
+})();
+</script>
+</body>
+  </html>
+  
