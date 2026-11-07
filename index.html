@@ -233,3 +233,87 @@ render();
 </body>
   </html>
   
+<style>
+.mz-upload {
+  background: #171717;
+  color: white;
+  padding: 20px;
+  border-radius: 18px;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+}
+.mz-upload h2 {color: #ff3155;}
+.mz-upload input, .mz-upload button {
+  width: 100%;
+  padding: 13px;
+  margin: 9px 0;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.mz-upload input {background: #292929; color: white; border: 1px solid #555;}
+.mz-upload button {
+  background: #ff3155;
+  color: white;
+  border: 0;
+  font-weight: bold;
+}
+.mz-upload video {
+  width: 100%;
+  border-radius: 14px;
+  margin-top: 12px;
+}
+</style>
+
+<div class="mz-upload">
+  <h2>🎬 MAZIJE VIDEO</h2>
+  <h3>Upload your video</h3>
+  <input type="text" id="mzTitle" placeholder="Video title">
+  <input type="file" id="mzFile" accept="video/*">
+  <video id="mzPreview" controls hidden></video>
+  <button id="mzPublish">PUBLISH VIDEO</button>
+  <p id="mzMessage">Share your moments with the world!</p>
+</div>
+
+<script>
+const mzFile = document.getElementById("mzFile");
+const mzPreview = document.getElementById("mzPreview");
+const mzMessage = document.getElementById("mzMessage");
+
+let mzVideoURL = "";
+
+mzFile.addEventListener("change", function() {
+  if (mzVideoURL) URL.revokeObjectURL(mzVideoURL);
+
+  const file = this.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("video/")) {
+    mzMessage.textContent = "Please select a video.";
+    return;
+  }
+
+  mzVideoURL = URL.createObjectURL(file);
+  mzPreview.src = mzVideoURL;
+  mzPreview.hidden = false;
+  mzMessage.textContent = "Video ready!";
+});
+
+document.getElementById("mzPublish").addEventListener("click", function() {
+  const title = document.getElementById("mzTitle").value.trim();
+
+  if (!mzFile.files.length) {
+    mzMessage.textContent = "Choose a video first.";
+    return;
+  }
+
+  if (!title) {
+    mzMessage.textContent = "Enter video title.";
+    return;
+  }
+
+  mzMessage.textContent =
+    "Video preview ready: " + title +
+    ". Cloud publishing will be connected next.";
+});
+</script>
+
